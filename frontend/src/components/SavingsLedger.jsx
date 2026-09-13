@@ -11,57 +11,57 @@ export default function SavingsLedger({ ledger, totalAnnual, apiBase = 'http://1
   };
 
   return (
-    <div className="glass-panel" style={{ padding: '24px', marginTop: '24px' }}>
+    <div className="glass-panel" style={{ padding: '36px' }}>
       
       {/* Ledger Header */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: '20px',
+        marginBottom: '28px',
         borderBottom: '1px solid var(--border-subtle)',
-        paddingBottom: '14px',
+        paddingBottom: '20px',
         flexWrap: 'wrap',
-        gap: '14px'
+        gap: '20px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '10px',
-            background: 'rgba(16, 185, 129, 0.15)',
-            border: '1px solid rgba(16, 185, 129, 0.35)',
+            width: '46px',
+            height: '46px',
+            borderRadius: '12px',
+            background: 'rgba(16, 185, 129, 0.18)',
+            border: '1px solid rgba(16, 185, 129, 0.4)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <ShieldCheck size={20} color="var(--neon-emerald)" />
+            <ShieldCheck size={26} color="var(--neon-emerald)" />
           </div>
           <div>
-            <h2 style={{ fontSize: '17px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.6px', margin: 0 }}>
-              Verified Household Financial Ledger &amp; Resolution Records
+            <h2 style={{ fontSize: '22px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.6px', margin: 0, color: '#ffffff' }}>
+              Verified Household Financial Recovery Ledger
             </h2>
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
-              Cryptographically verified record of all autonomous disputes approved and dispatched by the principal.
+            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
+              Permanent audit trail of all disputes authorized and dispatched by the principal.
             </p>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px', flexWrap: 'wrap' }}>
           <div style={{
-            background: 'rgba(16, 185, 129, 0.1)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
-            padding: '6px 14px',
-            borderRadius: '8px',
-            fontSize: '13px',
+            background: 'rgba(16, 185, 129, 0.12)',
+            border: '1px solid rgba(16, 185, 129, 0.35)',
+            padding: '10px 18px',
+            borderRadius: '12px',
+            fontSize: '15px',
             color: '#34d399',
             fontWeight: 800,
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '8px'
           }}>
             <span>Total Recovered:</span>
-            <span className="terminal-font" style={{ fontSize: '15px' }}>+${totalAnnual?.toFixed(2)}/yr</span>
+            <span className="terminal-font" style={{ fontSize: '20px' }}>+${totalAnnual?.toFixed(2)}/yr</span>
           </div>
 
           {ledger.length > 0 && (
@@ -69,9 +69,9 @@ export default function SavingsLedger({ ledger, totalAnnual, apiBase = 'http://1
               href={`${apiBase}/api/ledger/export`}
               download="lifeguard_recovered_savings.csv"
               className="btn-secondary"
-              style={{ textDecoration: 'none', fontSize: '12px', padding: '6px 14px' }}
+              style={{ textDecoration: 'none', fontSize: '14px', padding: '10px 20px' }}
             >
-              <Download size={14} /> Export CSV Audit Trail
+              <Download size={16} /> Export CSV Audit Trail
             </a>
           )}
         </div>
@@ -79,24 +79,24 @@ export default function SavingsLedger({ ledger, totalAnnual, apiBase = 'http://1
 
       {/* Ledger Records Table */}
       {ledger.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--text-muted)', fontSize: '13px' }}>
-          <ShieldCheck size={32} color="var(--text-dim)" style={{ margin: '0 auto 10px' }} />
-          <div>No resolutions executed yet.</div>
-          <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '4px' }}>
-            Authorize a pending decision card above to dispatch executive remediation and record permanent recovered capital.
+        <div style={{ textAlign: 'center', padding: '48px 20px', color: 'var(--text-muted)' }}>
+          <ShieldCheck size={42} color="var(--text-dim)" style={{ margin: '0 auto 14px' }} />
+          <div style={{ fontSize: '18px', fontWeight: 700, color: '#ffffff' }}>No Resolutions Executed Yet</div>
+          <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '6px' }}>
+            Authorize a pending decision card in the Action Gate to dispatch an executive dispute and record verified savings.
           </div>
         </div>
       ) : (
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '15px', textAlign: 'left' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-                <th style={{ padding: '10px 14px' }}>Date</th>
-                <th style={{ padding: '10px 14px' }}>Provider</th>
-                <th style={{ padding: '10px 14px' }}>Category</th>
-                <th style={{ padding: '10px 14px' }}>Action Executed</th>
-                <th style={{ padding: '10px 14px' }}>Annual Savings</th>
-                <th style={{ padding: '10px 14px' }}>Confirmation Receipt</th>
+              <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+                <th style={{ padding: '14px 18px' }}>Date</th>
+                <th style={{ padding: '14px 18px' }}>Provider</th>
+                <th style={{ padding: '14px 18px' }}>Category</th>
+                <th style={{ padding: '14px 18px' }}>Action Executed</th>
+                <th style={{ padding: '14px 18px' }}>Annual Savings</th>
+                <th style={{ padding: '14px 18px' }}>Confirmation Receipt</th>
               </tr>
             </thead>
             <tbody>
@@ -104,50 +104,50 @@ export default function SavingsLedger({ ledger, totalAnnual, apiBase = 'http://1
                 <tr
                   key={rec.id}
                   style={{
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
                     transition: 'background 0.15s ease'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)'}
                   onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                 >
-                  <td className="terminal-font" style={{ padding: '12px 14px', color: 'var(--text-muted)', fontSize: '12px' }}>
+                  <td className="terminal-font" style={{ padding: '16px 18px', color: 'var(--text-muted)', fontSize: '14px' }}>
                     {rec.resolved_at ? rec.resolved_at.slice(0, 10) : 'Today'}
                   </td>
 
-                  <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  <td style={{ padding: '16px 18px', fontWeight: 700, color: '#ffffff', fontSize: '16px' }}>
                     {rec.provider}
                   </td>
 
-                  <td style={{ padding: '12px 14px' }}>
-                    <span className="badge badge-medium" style={{ fontSize: '10px' }}>
+                  <td style={{ padding: '16px 18px' }}>
+                    <span className="badge badge-medium" style={{ fontSize: '12px', padding: '4px 10px' }}>
                       {rec.category}
                     </span>
                   </td>
 
-                  <td style={{ padding: '12px 14px', color: 'var(--text-secondary)' }}>
+                  <td style={{ padding: '16px 18px', color: 'var(--text-secondary)' }}>
                     {rec.action_type}
                   </td>
 
-                  <td className="terminal-font" style={{ padding: '12px 14px', fontWeight: 800, color: '#34d399', fontSize: '14px' }}>
+                  <td className="terminal-font" style={{ padding: '16px 18px', fontWeight: 800, color: '#34d399', fontSize: '17px' }}>
                     +${rec.amount_annual.toFixed(2)}/yr
                   </td>
 
-                  <td style={{ padding: '12px 14px' }}>
+                  <td style={{ padding: '16px 18px' }}>
                     <button
                       onClick={() => handleCopyCode(rec.confirmation_number)}
                       className="terminal-font btn-secondary"
                       style={{
-                        padding: '3px 8px',
-                        fontSize: '11px',
-                        background: 'rgba(255, 255, 255, 0.04)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        padding: '6px 12px',
+                        fontSize: '13px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
                         cursor: 'pointer'
                       }}
                       title="Click to copy receipt code"
                     >
-                      <Hash size={11} color="var(--neon-cyan)" />
+                      <Hash size={13} color="var(--neon-cyan)" />
                       <span>{rec.confirmation_number}</span>
-                      {copiedId === rec.confirmation_number ? <Check size={11} color="#34d399" /> : <Copy size={11} color="var(--text-muted)" />}
+                      {copiedId === rec.confirmation_number ? <Check size={13} color="#34d399" /> : <Copy size={13} color="var(--text-muted)" />}
                     </button>
                   </td>
                 </tr>

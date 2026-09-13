@@ -11,6 +11,7 @@ import { Shield, ExternalLink, BookOpen, Lock, Terminal } from 'lucide-react';
 const API_BASE = 'http://127.0.0.1:8000';
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState('decisions');
   const [decisions, setDecisions] = useState([]);
   const [metrics, setMetrics] = useState({ total_saved_annual: 0, pending_reviews_count: 0, ledger_items: [] });
   const [events, setEvents] = useState([]);
@@ -71,6 +72,7 @@ export default function App() {
       });
       if (res.ok) {
         await refreshData();
+        setActiveTab('decisions'); // Immediately show the surfaced decision card
       }
     } catch (err) {
       console.error('Failed to inject scenario:', err);
@@ -89,6 +91,7 @@ export default function App() {
       });
       if (res.ok) {
         await refreshData();
+        setActiveTab('decisions'); // Immediately show the surfaced decision card
       }
     } catch (err) {
       console.error('Custom audit failed:', err);
@@ -109,6 +112,7 @@ export default function App() {
       });
       if (res.ok) {
         await refreshData();
+        setActiveTab('decisions'); // Immediately show the surfaced decision card
       }
     } catch (err) {
       console.error('Upload audit failed:', err);
@@ -150,79 +154,93 @@ export default function App() {
   return (
     <div className="app-container">
       
-      {/* 1. Header & Live Financial Metrics Cockpit */}
-      <Header metrics={metrics} />
-
-      {/* 2. Autonomous Background Daemon: Routine Chores Sentinel & HITL Gating Simulator */}
-      <DaemonMonitor 
-        apiBase={API_BASE}
-        onDecisionSurfaced={refreshData}
+      {/* 1. Header with Brand, Big Metrics, and Clean Navigation Tabs */}
+      <Header 
+        metrics={metrics} 
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
       />
 
-      {/* 3. Two-Column Intelligence Command Center */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))',
-        gap: '24px',
-        alignItems: 'start',
-        marginBottom: '24px'
-      }}>
-        {/* Left Column: Human-in-the-Loop Action Center (Surfaced ONLY when decision needed) */}
-        <ActionCenter
-          decisions={decisions}
-          onApprove={handleApprove}
-          onDismiss={handleDismiss}
-          onViewMemo={(card) => setSelectedMemo(card)}
-        />
+      {/* 2. Focused Main Stage — Displays Exactly What You Need Without Information Overload */}
+      <main style={{ minHeight: '520px' }}>
+        
+        {/* View 1: Human-in-the-Loop Action Gate (Default View) */}
+        {activeTab === 'decisions' && (
+          <ActionCenter
+            decisions={decisions}
+            onApprove={handleApprove}
+            onDismiss={handleDismiss}
+            onViewMemo={(card) => setSelectedMemo(card)}
+            onTriggerDemo={() => handleInject('comcast')}
+          />
+        )}
 
-        {/* Right Column: Live Strands Agents Multi-Agent Reasoning Telemetry */}
-        <AgentTrace events={events} />
-      </div>
+        {/* View 2: Autonomous Background Daemon & Radar Operations */}
+        {activeTab === 'daemon' && (
+          <DaemonMonitor 
+            apiBase={API_BASE}
+            onDecisionSurfaced={() => {
+              refreshData();
+              setActiveTab('decisions');
+            }}
+          />
+        )}
 
-      {/* 4. Live Custom Audit Sandbox, Document Parser & Benchmark Matrix */}
-      <AuditWorkspace
-        onInject={handleInject}
-        onCustomAudit={handleCustomAudit}
-        onUploadAudit={handleUploadAudit}
-        loadingKey={loadingKey}
-      />
+        {/* View 3: Live Strands Agents Multi-Agent Reasoning Telemetry */}
+        {activeTab === 'telemetry' && (
+          <AgentTrace events={events} />
+        )}
 
-      {/* 5. Verified Household Financial Ledger & Dispute Records */}
-      <SavingsLedger 
-        ledger={metrics.ledger_items || []} 
-        totalAnnual={metrics.total_saved_annual || 0}
-        apiBase={API_BASE}
-      />
+        {/* View 4: Document Parser, Custom Audit Sandbox & Benchmark Matrix */}
+        {activeTab === 'sandbox' && (
+          <AuditWorkspace
+            onInject={handleInject}
+            onCustomAudit={handleCustomAudit}
+            onUploadAudit={handleUploadAudit}
+            loadingKey={loadingKey}
+          />
+        )}
 
-      {/* 6. World-Class Hackathon Submission Footer */}
+        {/* View 5: Verified Household Financial Recovery Ledger */}
+        {activeTab === 'ledger' && (
+          <SavingsLedger 
+            ledger={metrics.ledger_items || []} 
+            totalAnnual={metrics.total_saved_annual || 0}
+            apiBase={API_BASE}
+          />
+        )}
+
+      </main>
+
+      {/* 3. High-End Hackathon Footer */}
       <footer style={{
-        marginTop: '40px',
-        padding: '24px',
+        marginTop: '60px',
+        padding: '28px 32px',
         borderTop: '1px solid var(--border-subtle)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '16px',
+        gap: '20px',
         color: 'var(--text-muted)',
-        fontSize: '12px'
+        fontSize: '14px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Shield size={16} color="var(--neon-cyan)" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Shield size={18} color="var(--neon-cyan)" />
           <span>
-            <strong style={{ color: 'var(--text-primary)' }}>LifeGuard Agent</strong> • AWS Agents for Humans Hackathon 2026 (Everyday Life Track)
+            <strong style={{ color: '#ffffff' }}>LifeGuard Agent</strong> • AWS Agents for Humans Hackathon 2026 (Everyday Life Track)
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-            <Lock size={12} color="#10b981" /> 100% Client-Side Principal Gating
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Lock size={14} color="#10b981" /> 100% Client-Side Principal Gating
           </span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-            <Terminal size={12} color="var(--neon-cyan)" /> Strands Agents SDK v1.0.0
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Terminal size={14} color="var(--neon-cyan)" /> Strands Agents SDK v1.0.0
           </span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-            <BookOpen size={12} color="#f59e0b" /> FCC • FTC • CPSC • HHS Compliant
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <BookOpen size={14} color="#f59e0b" /> FCC • FTC • CPSC • HHS Compliant
           </span>
         </div>
       </footer>

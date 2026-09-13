@@ -28,6 +28,13 @@ class DecisionManager:
             return [c for c in cards if c.status == status]
         return cards
 
+    def reset_all(self):
+        """Resets all decisions and ledger records for demo replay."""
+        self.decisions.clear()
+        self.savings_ledger.clear()
+        self.total_saved_monthly = 0.0
+        self.total_saved_annual = 0.0
+
     async def emit_event(self, event: AgentEvent):
         """Broadcasts an agent thought or action event to all connected SSE clients."""
         for q in list(self.event_subscribers):

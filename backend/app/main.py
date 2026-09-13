@@ -318,6 +318,12 @@ async def get_decisions(status: str = None):
     action_status = ActionStatus(status) if status else None
     return decision_manager.list_decisions(action_status)
 
+@app.post("/api/decisions/reset")
+async def reset_decisions():
+    """Clears all decision cards and resets ledger for demo replay."""
+    decision_manager.reset_all()
+    return {"success": True, "message": "All decisions and ledger reset to clean slate."}
+
 @app.post("/api/decisions/{decision_id}/approve")
 async def approve_decision(decision_id: str, request: Request):
     body = await request.json() if request.headers.get("content-type") == "application/json" else {}

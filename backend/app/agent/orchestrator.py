@@ -158,20 +158,33 @@ class LifeGuardOrchestrator:
             annual_impact = doc.total_amount # full MSRP replacement value
             monthly_impact = round(doc.total_amount / 12, 2)
         elif doc.category == CategoryType.HEALTHCARE:
-            annual_impact = 335.00 # exact dispute overcharge amount
-            monthly_impact = 335.00
+            annual_impact = 420.00 if doc.total_amount >= 420.00 else 335.00 # exact dispute overcharge amount
+            monthly_impact = annual_impact
+        elif doc.category == CategoryType.SUBSCRIPTION:
+            # For subscriptions, if drift is 0 or low, recurring monthly charge is the subscription trap
+            monthly_impact = drift_data["monthly_drift"] if drift_data["monthly_drift"] > 0 else doc.total_amount
+            annual_impact = round(monthly_impact * 12, 2)
         else:
             annual_impact = drift_data["annual_leakage"]
             monthly_impact = drift_data["monthly_drift"]
 
         contacts = lookup_provider_contacts(doc.provider)
 
+        # Determine severity from annual impact
+        final_severity = SeverityLevel(drift_data["severity"])
+        if annual_impact >= 600 or doc.category == CategoryType.WARRANTY:
+            final_severity = SeverityLevel.CRITICAL
+        elif annual_impact >= 250:
+            final_severity = SeverityLevel.HIGH
+        elif annual_impact >= 100:
+            final_severity = SeverityLevel.MEDIUM
+
         decision_card = DecisionCard(
             id=decision_id,
             doc_id=doc.id,
             provider=doc.provider,
             category=doc.category,
-            severity=SeverityLevel(drift_data["severity"]),
+            severity=final_severity,
             title=f"Action Required: {doc.provider} — ${annual_impact:.2f} at stake",
             summary=(
                 f"LifeGuard detected {doc.category.value.lower()} leakage. "

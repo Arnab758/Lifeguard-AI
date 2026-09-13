@@ -1,7 +1,7 @@
 import React from 'react';
-import { Shield, Activity, Cpu, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Shield, Activity, Cpu, CheckCircle2, AlertCircle, Mail, Lock } from 'lucide-react';
 
-export default function Header({ metrics, activeTab, onTabChange }) {
+export default function Header({ metrics, activeTab, onTabChange, onOpenConnectModal }) {
   const totalSaved = metrics?.total_saved_annual || 0;
   const pendingCount = metrics?.pending_reviews_count || 0;
 
@@ -54,8 +54,8 @@ export default function Header({ metrics, activeTab, onTabChange }) {
           </div>
         </div>
 
-        {/* Big Financial Metric Highlights */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+        {/* Big Financial Metric Highlights & Connect Household */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
           
           {/* Reclaimed Capital */}
           <div style={{
@@ -65,7 +65,7 @@ export default function Header({ metrics, activeTab, onTabChange }) {
             padding: '12px 22px',
             borderRadius: '14px',
             textAlign: 'right',
-            minWidth: '220px'
+            minWidth: '200px'
           }}>
             <div style={{ fontSize: '12px', color: '#6ee7b7', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '2px' }}>
               Cumulative Capital Reclaimed
@@ -85,9 +85,9 @@ export default function Header({ metrics, activeTab, onTabChange }) {
               ? '1px solid rgba(245, 158, 11, 0.5)' 
               : '1px solid var(--border-subtle)',
             boxShadow: pendingCount > 0 ? '0 6px 24px -6px rgba(245, 158, 11, 0.35)' : 'none',
-            padding: '12px 22px',
+            padding: '12px 20px',
             borderRadius: '14px',
-            minWidth: '180px'
+            minWidth: '160px'
           }}>
             <div style={{ fontSize: '12px', color: pendingCount > 0 ? '#fcd34d' : 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '2px' }}>
               Decisions Required
@@ -101,6 +101,28 @@ export default function Header({ metrics, activeTab, onTabChange }) {
               </span>
             </div>
           </div>
+
+          {/* Connect Household Button */}
+          {onOpenConnectModal && (
+            <button
+              onClick={onOpenConnectModal}
+              className="btn-secondary"
+              style={{
+                fontSize: '14px',
+                padding: '14px 18px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                color: 'var(--neon-cyan)',
+                borderColor: 'rgba(0, 240, 255, 0.4)',
+                background: 'rgba(0, 240, 255, 0.08)'
+              }}
+              title="Connect your email forwarding in 30 seconds"
+            >
+              <Mail size={16} />
+              <span>Connect Household</span>
+            </button>
+          )}
 
         </div>
 

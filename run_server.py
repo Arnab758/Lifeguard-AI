@@ -14,7 +14,7 @@ if __name__ == "__main__":
         "backend.app.main:app",
         host="127.0.0.1",
         port=8001,
-        reload=False,
+        reload=True,
         log_level="info",
         access_log=True
     )

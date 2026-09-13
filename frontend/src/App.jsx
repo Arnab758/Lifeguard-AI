@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
+import ValuePropositionHero from './components/ValuePropositionHero';
+import DemoController from './components/DemoController';
+import HouseholdConnectModal from './components/HouseholdConnectModal';
 import DaemonMonitor from './components/DaemonMonitor';
 import AuditWorkspace from './components/AuditWorkspace';
 import ActionCenter from './components/ActionCenter';
@@ -17,6 +20,7 @@ export default function App() {
   const [events, setEvents] = useState([]);
   const [selectedMemo, setSelectedMemo] = useState(null);
   const [loadingKey, setLoadingKey] = useState(null);
+  const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
 
   // Fetch decisions and metrics from FastAPI backend
   const refreshData = async () => {
@@ -64,7 +68,7 @@ export default function App() {
   }, []);
 
   // Handle Benchmark Scenario Injection
-  const handleInject = async (scenarioKey) => {
+  const handleInject = async (scenarioKey, autoSwitch = true) => {
     setLoadingKey(scenarioKey);
     try {
       const res = await fetch(`${API_BASE}/api/scenarios/inject/${scenarioKey}`, {
@@ -72,12 +76,29 @@ export default function App() {
       });
       if (res.ok) {
         await refreshData();
-        setActiveTab('decisions'); // Immediately show the surfaced decision card
+        if (autoSwitch) {
+          setActiveTab('decisions'); // Immediately show the surfaced decision card
+        }
       }
     } catch (err) {
       console.error('Failed to inject scenario:', err);
     } finally {
       setLoadingKey(null);
+    }
+  };
+
+  // Handle Reset to Clean Slate
+  const handleResetAll = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/decisions/reset`, {
+        method: 'POST'
+      });
+      if (res.ok) {
+        await refreshData();
+        setActiveTab('decisions');
+      }
+    } catch (err) {
+      console.error('Reset failed:', err);
     }
   };
 
@@ -159,9 +180,25 @@ export default function App() {
         metrics={metrics} 
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        onOpenConnectModal={() => setIsConnectModalOpen(true)}
       />
 
-      {/* 2. Focused Main Stage — Displays Exactly What You Need Without Information Overload */}
+      {/* 2. Crystal-Clear Value Proposition Hero Banner */}
+      <ValuePropositionHero
+        onConnectClick={() => setIsConnectModalOpen(true)}
+        onRunComcastDemo={() => handleInject('comcast', true)}
+      />
+
+      {/* 3. Persistent 1-Click Grand Prize Interactive Demo Suite */}
+      <DemoController
+        onInjectScenario={handleInject}
+        onResetAll={handleResetAll}
+        loadingKey={loadingKey}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
+
+      {/* 4. Focused Main Stage — Displays Exactly What You Need Without Information Overload */}
       <main style={{ minHeight: '520px' }}>
         
         {/* View 1: Human-in-the-Loop Action Gate (Default View) */}
@@ -171,7 +208,10 @@ export default function App() {
             onApprove={handleApprove}
             onDismiss={handleDismiss}
             onViewMemo={(card) => setSelectedMemo(card)}
-            onTriggerDemo={() => handleInject('comcast')}
+            onTriggerDemo={() => handleInject('comcast', true)}
+            onCustomAudit={handleCustomAudit}
+            onUploadAudit={handleUploadAudit}
+            onOpenConnectModal={() => setIsConnectModalOpen(true)}
           />
         )}
 
@@ -194,7 +234,7 @@ export default function App() {
         {/* View 4: Document Parser, Custom Audit Sandbox & Benchmark Matrix */}
         {activeTab === 'sandbox' && (
           <AuditWorkspace
-            onInject={handleInject}
+            onInject={(key) => handleInject(key, true)}
             onCustomAudit={handleCustomAudit}
             onUploadAudit={handleUploadAudit}
             loadingKey={loadingKey}
@@ -212,7 +252,7 @@ export default function App() {
 
       </main>
 
-      {/* 3. High-End Hackathon Footer */}
+      {/* 5. High-End Hackathon Footer */}
       <footer style={{
         marginTop: '60px',
         padding: '28px 32px',
@@ -245,7 +285,7 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Modal for viewing & dispatching formal legal briefs */}
+      {/* 6. Modal for viewing & dispatching formal legal briefs */}
       <ResolutionModal 
         card={selectedMemo} 
         onClose={() => setSelectedMemo(null)}
@@ -253,6 +293,12 @@ export default function App() {
           handleApprove(id);
           setSelectedMemo(null);
         }}
+      />
+
+      {/* 7. Modal for Household Email Setup (Usable Tomorrow) */}
+      <HouseholdConnectModal
+        isOpen={isConnectModalOpen}
+        onClose={() => setIsConnectModalOpen(false)}
       />
 
     </div>

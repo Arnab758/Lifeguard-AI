@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DollarSign, CheckCircle2, ShieldCheck, Download, Copy, Check, Hash } from 'lucide-react';
 
-export default function SavingsLedger({ ledger, totalAnnual, apiBase = 'http://127.0.0.1:8000' }) {
+export default function SavingsLedger({ ledger, totalAnnual, apiBase = 'http://127.0.0.1:8001' }) {
   const [copiedId, setCopiedId] = useState(null);
 
   const handleCopyCode = (code) => {

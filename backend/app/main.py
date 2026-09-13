@@ -40,6 +40,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, RedirectResponse
+
+FRONTEND_DIST = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
+if FRONTEND_DIST.exists() and (FRONTEND_DIST / "assets").exists():
+    app.mount("/assets", StaticFiles(directory=str(FRONTEND_DIST / "assets")), name="assets")
+
+@app.get("/")
+async def root_handler():
+    """Serves the frontend app directly on port 8000 if built, or redirects to dev server."""
+    if FRONTEND_DIST.exists() and (FRONTEND_DIST / "index.html").exists():
+        return FileResponse(str(FRONTEND_DIST / "index.html"))
+    return RedirectResponse(url="http://localhost:5173/")
+
 DATA_DIR = Path(__file__).parent / "data"
 
 SCENARIOS_MAP = {

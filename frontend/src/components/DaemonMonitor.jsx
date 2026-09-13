@@ -5,7 +5,7 @@ import {
   Radio, CheckCircle2, ArrowRight, Play, Cpu, Zap
 } from 'lucide-react';
 
-export default function DaemonMonitor({ apiBase = 'http://127.0.0.1:8000', onDecisionSurfaced }) {
+export default function DaemonMonitor({ apiBase = 'http://127.0.0.1:8001', onDecisionSurfaced }) {
   const [daemonStats, setDaemonStats] = useState({
     daemon_active: true,
     total_routine_checks: 24,

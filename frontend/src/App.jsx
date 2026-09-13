@@ -8,7 +8,7 @@ import SavingsLedger from './components/SavingsLedger';
 import ResolutionModal from './components/ResolutionModal';
 import { Shield, ExternalLink, BookOpen, Lock, Terminal } from 'lucide-react';
 
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = 'http://127.0.0.1:8001';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('decisions');

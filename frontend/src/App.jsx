@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
+import DaemonMonitor from './components/DaemonMonitor';
 import AuditWorkspace from './components/AuditWorkspace';
 import ActionCenter from './components/ActionCenter';
 import AgentTrace from './components/AgentTrace';
@@ -150,12 +151,10 @@ export default function App() {
       {/* Top Header & Live Financial Metrics */}
       <Header metrics={metrics} />
 
-      {/* Primary Audit Workspace: Live Custom Audits, File Uploads & Demo Benchmark */}
-      <AuditWorkspace
-        onInject={handleInject}
-        onCustomAudit={handleCustomAudit}
-        onUploadAudit={handleUploadAudit}
-        loadingKey={loadingKey}
+      {/* Autonomous Background Daemon: Routine Repetitive Tasks & HITL Surfacing */}
+      <DaemonMonitor 
+        apiBase={API_BASE}
+        onDecisionSurfaced={refreshData}
       />
 
       {/* 2-Column Main Workspace */}
@@ -163,9 +162,10 @@ export default function App() {
         display: 'grid',
         gridTemplateColumns: 'minmax(400px, 1.2fr) minmax(350px, 1fr)',
         gap: '24px',
-        alignItems: 'start'
+        alignItems: 'start',
+        marginBottom: '24px'
       }}>
-        {/* Left Column: Human-in-the-Loop Decision Action Center */}
+        {/* Left Column: Human-in-the-Loop Decision Action Center (Surfaced ONLY when decision needed) */}
         <ActionCenter
           decisions={decisions}
           onApprove={handleApprove}
@@ -176,6 +176,14 @@ export default function App() {
         {/* Right Column: Live Strands Agents Telemetry & Thought Stream */}
         <AgentTrace events={events} />
       </div>
+
+      {/* Optional Manual Audit & File Upload Sandbox */}
+      <AuditWorkspace
+        onInject={handleInject}
+        onCustomAudit={handleCustomAudit}
+        onUploadAudit={handleUploadAudit}
+        loadingKey={loadingKey}
+      />
 
       {/* Bottom: Verified Financial Recovery Ledger */}
       <SavingsLedger 

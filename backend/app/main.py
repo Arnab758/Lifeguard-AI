@@ -14,12 +14,22 @@ from backend.app.config import settings
 from backend.app.models.schemas import IngestedDocument, DecisionCard, ActionStatus, LineItem, CategoryType
 from backend.app.hitl.decision_manager import decision_manager
 from backend.app.agent.orchestrator import orchestrator
+from backend.app.daemon.watcher import daemon_instance
 
 app = FastAPI(
     title="LifeGuard Agent API",
     description="Autonomous background LifeOps and financial safeguard platform powered by Strands Agents SDK",
     version=settings.VERSION
 )
+
+@app.on_event("startup")
+async def on_startup():
+    """Starts the autonomous background watcher daemon upon application boot."""
+    daemon_instance.start()
+
+@app.on_event("shutdown")
+async def on_shutdown():
+    daemon_instance.stop()
 
 # Enable CORS for frontend
 app.add_middleware(
@@ -83,11 +93,42 @@ async def inject_scenario(scenario_key: str):
     doc = IngestedDocument(**raw_data)
     # Process through the Strands Agents orchestrator
     decision_card = await orchestrator.process_document(doc)
+    daemon_instance.routine_checks_count += 1
+    daemon_instance.anomalies_surfaced_count += 1
+    daemon_instance._record_activity("ANOMALY_SURFACED", doc.provider, f"Surfaced Decision Card for ${decision_card.annual_impact:.2f}/yr. Human decision required.")
     return {
         "success": True,
         "message": f"Scenario '{doc.title}' evaluated by Strands Agents.",
         "decision": decision_card
     }
+
+@app.get("/api/daemon/status")
+async def get_daemon_status():
+    """Returns autonomous background daemon telemetry, silent passes, and recent activity."""
+    return daemon_instance.get_status()
+
+@app.post("/api/daemon/routine-cycle")
+async def trigger_routine_cycle():
+    """
+    Simulates a background routine check cycle.
+    The agent verifies a routine charge (e.g. Spotify, Netflix, ConEd electricity, CPSC sweep)
+    silently in the background WITHOUT human interruption.
+    """
+    entry = daemon_instance.run_routine_simulation_cycle()
+    return {
+        "success": True,
+        "message": "Routine background task handled silently without human interruption.",
+        "entry": entry,
+        "daemon_status": daemon_instance.get_status()
+    }
+
+@app.post("/api/daemon/ambient-drop/{scenario_key}")
+async def ambient_drop(scenario_key: str):
+    """
+    Simulates an invoice arriving via background email or dropped into the watched folder.
+    Daemon picks it up silently and ONLY surfaces a Decision Card because an anomaly was detected.
+    """
+    return await inject_scenario(scenario_key)
 
 class CustomAuditRequest(BaseModel):
     provider: str

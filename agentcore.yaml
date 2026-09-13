@@ -1,0 +1,43 @@
+# Amazon Bedrock AgentCore Runtime Specification
+# Schema Version: 2026-06-01
+version: "1.0"
+agent:
+  name: "lifeguard-autonomous-agent"
+  version: "1.0.0"
+  description: "Autonomous background LifeOps and financial safeguard agent built with Strands Agents SDK"
+  track: "Everyday Agents"
+
+runtime:
+  type: "python3.13"
+  entrypoint: "backend.app.main:app"
+  port: 8000
+  workers: 2
+  protocol: "http"
+
+model:
+  provider: "amazon-bedrock"
+  primary_model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  fallback_model_id: "amazon.nova-pro-v1:0"
+  region: "us-east-1"
+  inference_parameters:
+    temperature: 0.1
+    max_tokens: 4096
+    top_p: 0.95
+
+observability:
+  opentelemetry:
+    enabled: true
+    traces_export: "aws-xray"
+    metrics_export: "cloudwatch"
+  log_level: "INFO"
+  audit_retention_days: 90
+
+guardrails:
+  human_in_the_loop:
+    enabled: true
+    mandatory_approval_threshold_usd: 10.00
+    sensitive_actions:
+      - "CANCEL_SERVICE"
+      - "DISPATCH_LEGAL_DISPUTE"
+      - "CLAIM_WARRANTY_REFUND"
+      - "EXECUTE_CREDIT_DISPUTE"

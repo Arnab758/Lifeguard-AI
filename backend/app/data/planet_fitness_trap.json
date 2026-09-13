@@ -1,0 +1,28 @@
+{
+  "id": "doc_apexfit_2026_09",
+  "title": "Monthly Membership Auto-Debit Notice",
+  "provider": "Apex Fitness Clubs",
+  "category": "SUBSCRIPTION",
+  "document_date": "2026-09-01",
+  "account_id": "APEX-MEMBER-4410",
+  "total_amount": 49.99,
+  "previous_month_amount": 49.99,
+  "contract_end_date": "2026-03-01",
+  "raw_notes": "Initial 12-month commitment ended 6 months ago on March 1, 2026. Account auto-converted to month-to-month zombie status with no gym attendance in 180 days. Cancellation terms require an in-person notarized letter or physical visit to home club.",
+  "line_items": [
+    {
+      "name": "Black Card All-Access Monthly Dues",
+      "current_charge": 39.99,
+      "baseline_charge": 39.99,
+      "is_hidden_or_new": false,
+      "details": "Monthly recurring auto-debit."
+    },
+    {
+      "name": "Annual Equipment Maintenance Assessment (Monthly Proration)",
+      "current_charge": 10.00,
+      "baseline_charge": 0.00,
+      "is_hidden_or_new": true,
+      "details": "Billed monthly after contract term completion."
+    }
+  ]
+}

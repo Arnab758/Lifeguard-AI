@@ -1,0 +1,28 @@
+{
+  "id": "doc_comcast_2026_09",
+  "title": "Xfinity Broadband Monthly Statement",
+  "provider": "Comcast Xfinity",
+  "category": "TELECOM",
+  "document_date": "2026-09-02",
+  "account_id": "XFIN-98214-77A",
+  "total_amount": 82.50,
+  "previous_month_amount": 60.00,
+  "contract_end_date": "2026-08-31",
+  "raw_notes": "12-month promotional discount 'Connect More 300Mbps' expired on 2026-08-31. Stealth rate increase applied along with new unannounced line-item surcharge.",
+  "line_items": [
+    {
+      "name": "Connect More Internet (300 Mbps)",
+      "current_charge": 75.00,
+      "baseline_charge": 60.00,
+      "is_hidden_or_new": false,
+      "details": "Promotional rate expired, shifted to standard non-promotional tariff."
+    },
+    {
+      "name": "Regional Network Modernization Fee",
+      "current_charge": 7.50,
+      "baseline_charge": 0.00,
+      "is_hidden_or_new": true,
+      "details": "Newly added mandatory surcharge not included in original Broadband Consumer Label agreement."
+    }
+  ]
+}

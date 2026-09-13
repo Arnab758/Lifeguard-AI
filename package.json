@@ -1,0 +1,24 @@
+{
+  "name": "lifeguard-agent",
+  "version": "1.0.0",
+  "description": "LifeGuard Agent: Autonomous Everyday Consumer Protection Agent powered by Strands Agents SDK and Amazon Bedrock AgentCore",
+  "scripts": {
+    "start": "python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000",
+    "backend": "python -m uvicorn backend.app.main:app --reload --port 8000",
+    "frontend": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "test": "python -m pytest tests"
+  },
+  "keywords": [
+    "strands-agents",
+    "bedrock-agentcore",
+    "aws-hackathon",
+    "everyday-agent",
+    "consumer-advocacy",
+    "hitl",
+    "fastapi",
+    "react"
+  ],
+  "author": "LifeGuard Team",
+  "license": "MIT"
+}

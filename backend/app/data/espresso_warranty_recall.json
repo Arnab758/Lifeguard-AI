@@ -1,0 +1,23 @@
+{
+  "id": "doc_breville_2026_09",
+  "title": "Product Registration & Warranty Receipt",
+  "provider": "Breville Culinary Systems",
+  "category": "WARRANTY",
+  "document_date": "2024-09-18",
+  "account_id": "REG-BRV-88390",
+  "total_amount": 899.95,
+  "previous_month_amount": null,
+  "contract_end_date": null,
+  "warranty_expiration": "2026-09-18",
+  "serial_number": "BRV-BES878-S24901",
+  "raw_notes": "Breville Barista Touch Impress purchased 2 years ago with standard 24-month limited manufacturer warranty. Warranty expires in 5 calendar days. An active CPSC safety recall bulletin was posted for serial batch S24000-S25500 regarding pressure relief valve rupture.",
+  "line_items": [
+    {
+      "name": "Breville Barista Touch Impress (Brushed Stainless)",
+      "current_charge": 899.95,
+      "baseline_charge": 899.95,
+      "is_hidden_or_new": false,
+      "details": "Model BES878BSS1BCA1. Eligible for 100% manufacturer replacement or free service kit under Magnuson-Moss and CPSC safety directives."
+    }
+  ]
+}

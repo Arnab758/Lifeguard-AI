@@ -1,0 +1,28 @@
+{
+  "id": "doc_quest_2026_09",
+  "title": "Clinical Diagnostic Laboratory Statement",
+  "provider": "Quest Diagnostics Lab Services",
+  "category": "HEALTHCARE",
+  "document_date": "2026-08-28",
+  "account_id": "MED-QST-77192",
+  "total_amount": 420.00,
+  "previous_month_amount": null,
+  "contract_end_date": null,
+  "raw_notes": "Patient had routine annual checkup at in-network primary care clinic (Blue Cross Blue Shield). Blood was sent to Quest laboratory. Quest billed out-of-network charge using unbundled CPT codes 80053 and 84443 with zero in-network discount applied, in direct violation of the Federal No Surprises Act.",
+  "line_items": [
+    {
+      "name": "CPT 80053 Comprehensive Metabolic Panel (OON Non-Discounted)",
+      "current_charge": 290.00,
+      "baseline_charge": 55.00,
+      "is_hidden_or_new": false,
+      "details": "In-network negotiated rate is $55.00. Billed as $290.00 out-of-network balance bill."
+    },
+    {
+      "name": "CPT 84443 Thyroid Stimulating Hormone (OON Surcharge)",
+      "current_charge": 130.00,
+      "baseline_charge": 30.00,
+      "is_hidden_or_new": false,
+      "details": "In-network negotiated rate is $30.00. Billed as $130.00 out-of-network balance bill."
+    }
+  ]
+}

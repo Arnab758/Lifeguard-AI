@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
-import ScenarioInjector from './components/ScenarioInjector';
+import AuditWorkspace from './components/AuditWorkspace';
 import ActionCenter from './components/ActionCenter';
 import AgentTrace from './components/AgentTrace';
 import SavingsLedger from './components/SavingsLedger';
@@ -60,7 +60,7 @@ export default function App() {
     };
   }, []);
 
-  // Handle Scenario Injection
+  // Handle Benchmark Scenario Injection
   const handleInject = async (scenarioKey) => {
     setLoadingKey(scenarioKey);
     try {
@@ -74,6 +74,42 @@ export default function App() {
       console.error('Failed to inject scenario:', err);
     } finally {
       setLoadingKey(null);
+    }
+  };
+
+  // Handle Custom Bill Audit
+  const handleCustomAudit = async (customData) => {
+    try {
+      const res = await fetch(`${API_BASE}/api/audit-custom`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(customData)
+      });
+      if (res.ok) {
+        await refreshData();
+      }
+    } catch (err) {
+      console.error('Custom audit failed:', err);
+    }
+  };
+
+  // Handle File Upload Audit
+  const handleUploadAudit = async (file, overrides) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      if (overrides.provider_override) formData.append('provider_override', overrides.provider_override);
+      if (overrides.baseline_override) formData.append('baseline_override', overrides.baseline_override);
+
+      const res = await fetch(`${API_BASE}/api/audit-upload`, {
+        method: 'POST',
+        body: formData
+      });
+      if (res.ok) {
+        await refreshData();
+      }
+    } catch (err) {
+      console.error('Upload audit failed:', err);
     }
   };
 
@@ -114,8 +150,13 @@ export default function App() {
       {/* Top Header & Live Financial Metrics */}
       <Header metrics={metrics} />
 
-      {/* 1-Click Interactive Scenario Injector */}
-      <ScenarioInjector onInject={handleInject} loadingKey={loadingKey} />
+      {/* Primary Audit Workspace: Live Custom Audits, File Uploads & Demo Benchmark */}
+      <AuditWorkspace
+        onInject={handleInject}
+        onCustomAudit={handleCustomAudit}
+        onUploadAudit={handleUploadAudit}
+        loadingKey={loadingKey}
+      />
 
       {/* 2-Column Main Workspace */}
       <div style={{
@@ -137,10 +178,21 @@ export default function App() {
       </div>
 
       {/* Bottom: Verified Financial Recovery Ledger */}
-      <SavingsLedger ledger={metrics.ledger_items || []} totalAnnual={metrics.total_saved_annual || 0} />
+      <SavingsLedger 
+        ledger={metrics.ledger_items || []} 
+        totalAnnual={metrics.total_saved_annual || 0}
+        apiBase={API_BASE}
+      />
 
-      {/* Modal for viewing drafted legal dossiers */}
-      <ResolutionModal card={selectedMemo} onClose={() => setSelectedMemo(null)} />
+      {/* Modal for viewing & dispatching drafted legal dossiers */}
+      <ResolutionModal 
+        card={selectedMemo} 
+        onClose={() => setSelectedMemo(null)}
+        onApproveAndDispatch={(id) => {
+          handleApprove(id);
+          setSelectedMemo(null);
+        }}
+      />
     </div>
   );
 }

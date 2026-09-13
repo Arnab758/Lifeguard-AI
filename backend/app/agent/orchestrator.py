@@ -12,6 +12,7 @@ from backend.app.models.schemas import (
 )
 from backend.app.hitl.decision_manager import decision_manager
 from backend.app.config import settings
+from backend.app.data.provider_directory import lookup_provider_contacts
 
 class LifeGuardOrchestrator:
     """
@@ -163,6 +164,8 @@ class LifeGuardOrchestrator:
             annual_impact = drift_data["annual_leakage"]
             monthly_impact = drift_data["monthly_drift"]
 
+        contacts = lookup_provider_contacts(doc.provider)
+
         decision_card = DecisionCard(
             id=decision_id,
             doc_id=doc.id,
@@ -185,7 +188,11 @@ class LifeGuardOrchestrator:
             ),
             drafted_action_type=action_type,
             drafted_subject=drafted_res["subject"],
-            drafted_body=drafted_res["body"]
+            drafted_body=drafted_res["body"],
+            executive_email=contacts.get("executive_email"),
+            portal_url=contacts.get("portal_url"),
+            mailing_address=contacts.get("mailing_address"),
+            regulatory_agency=contacts.get("regulatory_agency")
         )
 
         decision_manager.add_decision(decision_card)

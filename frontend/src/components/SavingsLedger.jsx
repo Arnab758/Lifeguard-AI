@@ -1,18 +1,30 @@
 import React from 'react';
-import { DollarSign, CheckCircle, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { DollarSign, CheckCircle, ShieldCheck, Download } from 'lucide-react';
 
-export default function SavingsLedger({ ledger, totalAnnual }) {
+export default function SavingsLedger({ ledger, totalAnnual, apiBase = 'http://127.0.0.1:8000' }) {
   return (
     <div className="glass-panel" style={{ padding: '20px', marginTop: '24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', flexWrap: 'wrap', gap: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <ShieldCheck size={20} color="var(--accent-emerald)" />
           <h2 style={{ fontSize: '16px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
             Verified Household Financial Ledger &amp; Resolution Audit
           </h2>
         </div>
-        <div style={{ fontSize: '13px', color: '#34d399', fontWeight: 700 }}>
-          Total Recovered Capital: ${totalAnnual?.toFixed(2)}/yr
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ fontSize: '13px', color: '#34d399', fontWeight: 700 }}>
+            Total Recovered Capital: ${totalAnnual?.toFixed(2)}/yr
+          </div>
+          {ledger.length > 0 && (
+            <a
+              href={`${apiBase}/api/ledger/export`}
+              download="lifeguard_recovered_savings.csv"
+              className="btn-secondary"
+              style={{ textDecoration: 'none', fontSize: '11px', padding: '5px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}
+            >
+              <Download size={13} /> Export CSV
+            </a>
+          )}
         </div>
       </div>
 

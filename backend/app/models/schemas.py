@@ -78,6 +78,10 @@ class DecisionCard(BaseModel):
     drafted_action_type: str # e.g. "FCC_PRICE_MATCH_DISPUTE", "FTC_CLICK_TO_CANCEL", "WARRANTY_RECALL_CLAIM", "CPT_OVERBILLING_APPEAL"
     drafted_subject: str
     drafted_body: str
+    executive_email: Optional[str] = None
+    portal_url: Optional[str] = None
+    mailing_address: Optional[str] = None
+    regulatory_agency: Optional[str] = None
     suggested_actions: List[str] = ["Approve & Dispatch", "Modify Terms", "Dismiss"]
     action_taken_at: Optional[str] = None
     user_note: Optional[str] = None

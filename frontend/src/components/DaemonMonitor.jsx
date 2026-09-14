@@ -4,6 +4,7 @@ import {
   Sparkles, RefreshCw, FolderSearch, Mail, 
   Radio, CheckCircle2, ArrowRight, Play, Cpu, Zap
 } from 'lucide-react';
+import LifeOpsRadar from './LifeOpsRadar';
 
 export default function DaemonMonitor({ apiBase = 'http://127.0.0.1:8001', onDecisionSurfaced }) {
   const [daemonStats, setDaemonStats] = useState({
@@ -265,6 +266,16 @@ export default function DaemonMonitor({ apiBase = 'http://127.0.0.1:8001', onDec
         </div>
 
       </div>
+
+      {/* Interactive Ambient LifeOps Orbital Radar */}
+      <LifeOpsRadar 
+        activeAnomaly={selectedAnomalyKey} 
+        onSelectChannel={(ch) => {
+          if (['comcast', 'gym', 'warranty', 'medical'].includes(ch.id)) {
+            setSelectedAnomalyKey(ch.id);
+          }
+        }}
+      />
 
       {/* Simulator Deck - Clear, Distinct, Spacious */}
       <div className="glass-panel" style={{ padding: '32px' }}>

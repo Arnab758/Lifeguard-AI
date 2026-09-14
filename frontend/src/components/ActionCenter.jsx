@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import BillDiffViewer from './BillDiffViewer';
 import { 
   AlertTriangle, CheckCircle2, XCircle, FileText, Send, 
   Scale, ArrowRight, ShieldAlert, Sparkles, Building, ExternalLink, 
@@ -280,6 +281,16 @@ export default function ActionCenter({
               <p style={{ fontSize: '16px', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '20px' }}>
                 {card.summary}
               </p>
+
+              {/* Interactive Fine-Print Diff & Capital Leakage Inspector */}
+              <BillDiffViewer
+                provider={card.provider}
+                category={card.category}
+                baselineAmount={card.annual_impact > 500 ? 10.00 : 50.00}
+                currentAmount={card.annual_impact > 500 ? 59.99 : 84.99}
+                annualImpact={card.annual_impact}
+                statutoryRule={card.policy_reference?.citation || 'FCC 47 C.F.R. § 8.1'}
+              />
 
               {/* Statutory Legal Authority Box */}
               <div style={{

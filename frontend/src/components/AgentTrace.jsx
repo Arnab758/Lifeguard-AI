@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Terminal, Cpu, CheckCircle2, AlertCircle, Wrench, Shield, Play } from 'lucide-react';
+import AgentNeuralGraph from './AgentNeuralGraph';
 
 export default function AgentTrace({ events }) {
   const scrollRef = useRef(null);
@@ -20,8 +21,20 @@ export default function AgentTrace({ events }) {
     }
   };
 
+  const latestAgent = events.length > 0 ? events[events.length - 1].agent_name : null;
+  let currentStep = 2;
+  if (latestAgent === 'AuditAgent') currentStep = 1;
+  else if (latestAgent === 'PolicyAgent') currentStep = 2;
+  else if (latestAgent === 'ResolverAgent') currentStep = 3;
+  else if (latestAgent === 'HITLGatekeeper') currentStep = 4;
+
   return (
-    <div className="glass-panel" style={{ padding: '32px', display: 'flex', flexDirection: 'column', minHeight: '600px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {/* 1. Interactive Multi-Agent Neural Flight Deck */}
+      <AgentNeuralGraph activeStep={currentStep} />
+
+      {/* 2. Live SSE Telemetry Terminal Stream */}
+      <div className="glass-panel" style={{ padding: '32px', display: 'flex', flexDirection: 'column', minHeight: '520px' }}>
       
       {/* Top Terminal Bar */}
       <div style={{
@@ -166,5 +179,6 @@ export default function AgentTrace({ events }) {
       </div>
 
     </div>
+  </div>
   );
 }
